@@ -27,3 +27,11 @@ Work Flow is as follows:
 
 To Run the App on local machine:
 Go to root directory and run 'npm run start'
+
+
+The App could be extended in several ways to include more features:
+1) Start and Destination could vary.
+2) Depending on start, options for travel and time could be taken into account while planning the trip
+3) Options for hotels and restaurants could be provided based on trail locations to save time.
+4) Seasonal variations for the different trails could be taken into account.
+5) Options for summer and winter activities/ or family friendly trails could be provided based on intent.
