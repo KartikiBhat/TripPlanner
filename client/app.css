@@ -1,0 +1,85 @@
+body div.app{
+    background: white;
+    touch-action: none;
+}
+body div.app-content div.image{
+    background-color: white;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0),85%,rgba(255, 255, 255,100)),url('assets/yosemite.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 40%; 
+}
+
+body div.navbar.navbar-app.navbar-absolute-bottom{
+    background-color: black;
+}
+body div.navbar.navbar-app.navbar-absolute-bottom a{
+    color: white;
+}
+body div.scrollable div.scrollable-content{
+    padding: 20px;
+}
+
+body div.btn-group.screentwo{
+    margin: 5px;
+}
+
+body li.toucharea{
+    border: 2px solid #008CBA;
+    border-radius: 8px;
+    padding: 5px;
+}
+body li.selected{
+    background-color: #008CBA;
+    color: white;
+}
+body table#itinerary{
+    margin-bottom: 10px;
+}
+
+body table#itinerary tr{
+    border: 1px solid #7C97A4;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body table tr td.day{
+    background-color:#F2F5F6;
+    color: black;
+    border: 1px solid #7C97A4;
+    padding: 5px;
+}
+
+body table tr td.step div{
+    background-color:#F2F5F6;
+    color: black;
+    margin: 10px;
+    padding: 5px;
+}
+
+/* body div.navbar.navbar-default{
+    margin-bottom: 0px;
+    background-color: black;
+  
+}
+body div.navbar.navbar-default  
+div.navbar-brand.navbar-nav.navbar-brand-center{
+    white-space: normal;
+    position: inherit;
+    height: inherit;
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 24px;
+    font-weight: bold;
+} */
+
+body div.navbar.navbar-app.navbar-absolute-top{
+    background-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+body div.navbar.navbar-app.navbar-absolute-top div.navbar-brand{
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+}
+

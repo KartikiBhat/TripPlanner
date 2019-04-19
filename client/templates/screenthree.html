@@ -1,0 +1,15 @@
+<div>Your itinerary!</div>
+<div ng-repeat="day in $ctrl.screenthree.days">
+    <table id="itinerary">
+        <tr>
+            <td class="day">
+                Day {{day.name+1}}
+            </td>
+            <td class="step">
+                <div ng-repeat="step in day.steps">
+                    {{step}}
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

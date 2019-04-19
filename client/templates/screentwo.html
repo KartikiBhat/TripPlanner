@@ -1,0 +1,26 @@
+<div style="margin-bottom: 3px">Choose your trails:</div>
+<div ng-repeat="type in $ctrl.trailtypes" 
+style="margin-bottom: 20px"
+ui-swipe-left="$ctrl.screentwo.screenThree()"
+>
+<!--  -->
+    <div ng-if="type.show">Some {{type.name}} options:</div>
+    <div class="btn-group justified screentwo"
+    ng-repeat="trail in $ctrl.trails[type.name]"
+    ng-if="type.show">
+        <li class="toucharea" trail="trail" 
+        ng-class="{'selected':trail.select}">
+            {{trail.name}}
+            <span style="float:right">{{trail.distance}}</span>
+        </li>     
+    </div>
+</div>
+<!-- <form ng-submit="$ctrl.screentwo.screenThree()">
+        <button class="btn btn-primary btn-block">
+                Next
+        </button>
+    
+        <div ui-content-for="navbarAction">
+            <a class="btn" ng-click="$ctrl.screentwo.screenThree()">Next</a>
+        </div>
+</form> -->
