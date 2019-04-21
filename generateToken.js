@@ -1,7 +1,7 @@
 var jwt = require('jsonwebtoken');
 var request = require('request');
-
-exports.getAuthToken = function(){
+var oauthToken = null;
+function getAuthToken(){
     var url = process.env.EINSTEIN_VISION_URL
     var private_key = process.env.EINSTEIN_VISION_PRIVATE_KEY
     var account_id = process.env.EINSTEIN_VISION_ACCOUNT_ID
@@ -39,9 +39,14 @@ exports.getAuthToken = function(){
     }
 
     // Make the OAuth call to generate a token
-    return request.post(options, function(error, response, body) {
+    request.post(options, function(error, response, body) {
         var data = JSON.parse(body);
         console.log(data["access_token"]);
-        return data;
+        oauthToken = data.access_token;
+        Promise.resolve(data);
     });
+}
+module.exports = {
+    oauthToken: oauthToken,
+    getAuthToken: getAuthToken
 }

@@ -3,7 +3,7 @@ var request = require('request');
 const trails = require('../models/trails');
 let token;
 require('../generateToken').getAuthToken().then((res)=>{
-    token = data["access_token"];
+    token = res.access_token;
 })
 let router = express.Router();
 
@@ -33,6 +33,16 @@ router.get('/intent', (req,res,next)=>{
 
     request.post(options, function(error, response, body){
         if(error)next(error);
+        if(response.statusCode==401){
+            require('../generateToken').getAuthToken().then((res)=>{
+                token = res.access_token;
+                request.post(options, function(error, response, body){
+                    res.status(200);
+                    res.json(JSON.parse(body));
+                })
+            })
+        }
+            
         res.status(200);
         res.json(JSON.parse(body));
         console.log("body ", JSON.parse(body));
