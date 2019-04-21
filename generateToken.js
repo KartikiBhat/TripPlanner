@@ -2,9 +2,9 @@ var jwt = require('jsonwebtoken');
 var http = require('http')
 
 exports.getAuthToken = function(){
-    var url = process.env.EINSTEIN_PLATFORM_SERVICES_URL
-    var private_key = process.env.EINSTEIN_PLATFORM_SERVICES_PRIVATE_KEY
-    var account_id = process.env.EINSTEIN_PLATFORM_SERVICES_ACCOUNT_ID
+    var url = process.env.EINSTEIN_VISION_URL
+    var private_key = process.env.EINSTEIN_VISION_PRIVATE_KEY
+    var account_id = process.env.EINSTEIN_VISION_ACCOUNT_ID
 
     var reqUrl = `${url}v2/oauth2/token`;
 
