@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-var http = require('http')
+var request = require('request');
 
 exports.getAuthToken = function(){
     var url = process.env.EINSTEIN_VISION_URL

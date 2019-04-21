@@ -31,7 +31,6 @@ router.get('/intent', (req,res,next)=>{
         formData:formData
     }
 
-    // console.log("options ",options);
     request.post(options, function(error, response, body){
         if(error)next(error);
         res.status(200);
