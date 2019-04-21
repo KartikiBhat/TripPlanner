@@ -68,7 +68,7 @@ angular.module('app')
             }).then((resp)=>{
                 let positive = false;
                 let index = resp.data.probabilities.findIndex((el)=>{
-                    el.label = "positive";
+                    return el.label == "positive";
                 })
                 if(resp.data && resp.data.probabilities &&
                     resp.data.probabilities[index].probability > 0.5)

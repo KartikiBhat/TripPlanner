@@ -1,11 +1,10 @@
 var jwt = require('jsonwebtoken');
 var request = require('request');
-var oauthToken = null;
+
 function getAuthToken(){
     var url = process.env.EINSTEIN_VISION_URL
     var private_key = process.env.EINSTEIN_VISION_PRIVATE_KEY
     var account_id = process.env.EINSTEIN_VISION_ACCOUNT_ID
-
     var reqUrl = `${url}v2/oauth2/token`;
 
     // JWT payload
@@ -39,14 +38,17 @@ function getAuthToken(){
     }
 
     // Make the OAuth call to generate a token
-    request.post(options, function(error, response, body) {
-        var data = JSON.parse(body);
-        console.log(data["access_token"]);
-        oauthToken = data.access_token;
-        Promise.resolve(data);
-    });
+    return new Promise(function(resolve, reject){
+        request.post(options, function(error, response, body) {
+            if(error)return reject(error);
+            var data = JSON.parse(body);
+            console.log(data["access_token"]);
+            resolve(data);
+        });
+    })
+   
 }
 module.exports = {
-    oauthToken: oauthToken,
+    // oauthToken: oauthToken,
     getAuthToken: getAuthToken
 }

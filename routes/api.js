@@ -1,10 +1,10 @@
 const express = require('express');
 var request = require('request');
 const trails = require('../models/trails');
-let token;
-require('../generateToken').getAuthToken().then((res)=>{
-    token = res.access_token;
-})
+let token = null;
+require('../generateToken').getAuthToken().then((resp)=>{
+    token = resp.access_token;
+});
 let router = express.Router();
 
 router.get('/trails',(req,res,next)=>{
@@ -13,7 +13,7 @@ router.get('/trails',(req,res,next)=>{
 })
 
 router.get('/intent', (req,res,next)=>{
-
+    // let token = require('../generateToken').oauthToken;
     var formData = {
       modelId: "CommunitySentiment",
       document: req.query.document
@@ -31,7 +31,9 @@ router.get('/intent', (req,res,next)=>{
         formData:formData
     }
 
+    console.log(options);
     request.post(options, function(error, response, body){
+        console.log("response ",response);
         if(error)next(error);
         if(response.statusCode==401){
             require('../generateToken').getAuthToken().then((res)=>{
