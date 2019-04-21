@@ -61,47 +61,89 @@ angular.module('app')
         local.screenthree = {};
 
         function processData(){
-            angular.forEach(local.trails, (el)=>{
-                el.forEach((trail)=>{
-                    trail.select = false;
+            $http({
+                method: 'GET',
+                url: '/api/intent',
+                params: {document: local.data.intent}
+            }).then((resp)=>{
+                let positive = false;
+                let index = resp.data.probabilities.findIndex((el)=>{
+                    el.label = "positive";
                 })
-            });
-
-            local.trailtypes.forEach((el)=>{
-                el.show = false;
-            })
-
-            //if only 1 day, do the easiest trail
-            if(local.data.days == 1){
-                local.trailtypes[0].show = true;
-            }
-            //if 2 days depending on age, can do 1 easy and 
-            //1 tough
-            else if(local.data.days == 2){
-                local.trailtypes[0].show = true;
-                if(local.data.age < local.agegroups.one)
-                    local.trailtypes[3].show = true;
-                else if(local.data.age < local.agegroups.two)
-                    local.trailtypes[2].show = true;
-                else if(local.data.age < local.agegroups.three)
-                    local.trailtypes[1].show = true;
-            //if more number of days, depending on age, 
-            //can do several trails
-            }else{
-                if(local.data.age < local.agegroups.one){
-                    local.trailtypes.forEach((el)=>{
-                        el.show = true;
+                if(resp.data && resp.data.probabilities &&
+                    resp.data.probabilities[index].probability > 0.5)
+                    positive = true;
+               
+                angular.forEach(local.trails, (el)=>{
+                    el.forEach((trail)=>{
+                        trail.select = false;
                     })
-                }else if(local.data.age < local.agegroups.two){
-                   for(let i=0;i<local.trailtypes.length-1;i++){
-                       local.trailtypes[i].show = true;
-                   }
-                }else if(local.data.age < local.agegroups.three){
-                    for(let i=0;i<local.trailtypes.length-2;i++){
-                        local.trailtypes[i].show = true;
-                    } 
+                });
+    
+                local.trailtypes.forEach((el)=>{
+                    el.show = false;
+                })
+    
+                //if only 1 day, do the easiest trail
+                if(local.data.days == 1){
+                    local.trailtypes[0].show = true;
                 }
-            }
+                //if 2 days depending on age, can do 1 easy and 
+                //1 tough
+                else if(local.data.days == 2){
+                    local.trailtypes[0].show = true;
+                    if(local.data.age < local.agegroups.one){
+                        if(positive)
+                            local.trailtypes[3].show = true;
+                        else  local.trailtypes[1].show = true; 
+                    }   
+                    else if(local.data.age < local.agegroups.two){
+                        if(positive)
+                            local.trailtypes[2].show = true;
+                        else  local.trailtypes[1].show = true;
+                    }   
+                    else if(local.data.age < local.agegroups.three){
+                        if(positive)
+                            local.trailtypes[2].show = true;
+                        else local.trailtypes[1].show = true;
+                    }
+                        
+                //if more number of days, depending on age, 
+                //can do several trails
+                }else{
+                    if(local.data.age < local.agegroups.one){
+                        if(positive){
+                            local.trailtypes[2].show = true;
+                            local.trailtypes[3].show = true;
+                        }
+                        else
+                            for(let i=0;i<local.trailtypes.length-1;i++){
+                                local.trailtypes[i].show = true;
+                            }
+                    }else if(local.data.age < local.agegroups.two){
+                        if(positive){
+                            for(let i=0;i<local.trailtypes.length;i++){
+                                local.trailtypes[i].show = true;
+                            }
+                        }else
+                            for(let i=0;i<local.trailtypes.length-1;i++){
+                                local.trailtypes[i].show = true;
+                            }
+                    }else if(local.data.age < local.agegroups.three){
+                        if(positive)
+                            for(let i=0;i<local.trailtypes.length-1;i++){
+                                local.trailtypes[i].show = true;
+                            }
+                        else
+                            for(let i=0;i<local.trailtypes.length-2;i++){
+                                local.trailtypes[i].show = true;
+                            } 
+                    }
+                }
+            }).catch((err)=>{
+                console.log(err);
+            })
+            
         }
 
         function makeItinerary(trailSelected){
@@ -138,11 +180,12 @@ angular.module('app')
                     //add previous time to get next start time
                     let nexttime = (8+next.time) > 12?8+next.time-12:8+next.time;
                     let time = (8+next.time) > 12?"pm":"am";
-                    if(nexttime<=3){
+                    if((8+next.time)<=15){
+                        let st = time=="am"?": Have brunch":": Have lunch.";
                         local.screenthree.days[1].steps.push(hike);
-                        local.screenthree.days[1].steps.push(nexttime+time+": Have lunch.");
+                        local.screenthree.days[1].steps.push(nexttime+time+st);
                         nexttime = (2+nexttime) > 12?2+nexttime-12:2+nexttime;
-                        time = 8+next.time+2 > 12?"pm":"am";
+                        time = 8+next.time+2 >= 12?"pm":"am";
                     }else{
                         hike+="Have lunch on the way.";
                         local.screenthree.days[1].steps.push(hike);
@@ -153,7 +196,7 @@ angular.module('app')
                     if(local.data.days == 2){   
                         local.screenthree.days[1].steps.push(nexttime+time+": Start back for San Franscisco.");
                     }else{
-                        local.screenthree.days[1].steps.push(nexttime+time+": Explore the village and hotel campus!");
+                        local.screenthree.days[1].steps.push(nexttime+time+": Explore other activities!");
                         local.screenthree.days[1].steps.push("7pm: Time for dinner!");
                         for(let i=2;i<local.data.days-1;i++){
                             local.screenthree.days[i] = {
@@ -168,13 +211,15 @@ angular.module('app')
 
 
                             nexttime = (8+next.time) > 12?8+next.time-12:8+next.time;
-                            time = (8+next.time >12)?"pm":"am";
-                            if(nexttime <= 3){
+                            time = (8+next.time >=12)?"pm":"am";
+                            if((8+next.time)<= 15){
+                                let st = time=="am"?": Have brunch":": Have lunch.";
                                 local.screenthree.days[i].steps.push(hike);
-                                local.screenthree.days[i].steps.push(nexttime+time+": Have lunch.");
+                                local.screenthree.days[i].steps.push(nexttime+time+st);
                                 
                                 nexttime = nexttime + 2;
-                                time = (8+next.time+2 >12)?"pm":"am";
+                                nexttime = nexttime > 12?nexttime-12:nexttime;
+                                time = (8+next.time+2 >=12)?"pm":"am";
                             }else{
                                 local.screenthree.days[i].steps.push(hike+"Have lunch on the way.");
                             }
@@ -194,16 +239,17 @@ angular.module('app')
                         next.distance+" for "+next.time+" hour(s).";
 
                         nexttime = (8+next.time) > 12?8+next.time-12:8+next.time;
-                        time = (8+next.time >12)?"pm":"am";
-                        if(nexttime <= 3){
+                        time = (8+next.time >=12)?"pm":"am";
+                        if((8+next.time) <= 15){
                             local.screenthree.days[local.data.days-1].
                             steps.push(hike);
-                    
+                            let st = time=="am"?": Have brunch":": Have lunch.";
                             local.screenthree.days[local.data.days-1].
-                                steps.push(nexttime+time+": Have lunch.");
+                                steps.push(nexttime+time+st);
 
                             nexttime = nexttime + 2;
-                            time = (8+next.time+2 >12)?"pm":"am";
+                            nexttime = nexttime > 12?nexttime-12:nexttime;
+                            time = (8+next.time+2 >=12)?"pm":"am";
                         }else{
                             local.screenthree.days[local.data.days-1].
                             steps.push(hike+"Have lunch on the way.");
@@ -230,6 +276,8 @@ angular.module('app')
                         show: false
                     }
                 })
+            }).catch((err)=>{
+                console.log(err);
             })
         }
       

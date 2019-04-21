@@ -1,5 +1,5 @@
 <!-- ng-submit="$ctrl.screenone.screenTwo()" -->
-<form role="form" ui-swipe-left="$ctrl.screenone.screenTwo()">
+<form role="form" ng-swipe-left="$ctrl.screenone.screenTwo()">
     <fieldset>
         <legend>Tell Us More About Yourself!</legend>
         <div class="form-group">
@@ -15,7 +15,7 @@
         <div class="form-group">
             <label>How do want your trip to be?</label>
             <input type="text"
-            class="form-control" placeholder="Eg.Adventurous/Relaxing" ng-model="$ctrl.data.intent">
+            class="form-control" placeholder="Eg.Adventurous/Sit And Relax" ng-model="$ctrl.data.intent">
         </div>
     </fieldset>
     <hr>

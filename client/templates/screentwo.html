@@ -1,7 +1,7 @@
 <div style="margin-bottom: 3px">Choose your trails:</div>
 <div ng-repeat="type in $ctrl.trailtypes" 
 style="margin-bottom: 20px"
-ui-swipe-left="$ctrl.screentwo.screenThree()"
+ng-swipe-left="$ctrl.screentwo.screenThree()"
 >
 <!--  -->
     <div ng-if="type.show">Some {{type.name}} options:</div>
